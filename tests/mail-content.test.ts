@@ -11,6 +11,7 @@ test("sanitizes editor HTML while keeping email formatting", () => {
   const result = sanitizeEmailHtml('<p style="text-align:center;color:red">Oferta</p><script>alert(1)</script><a href="javascript:alert(1)">link</a>');
   assert.match(result, /text-align:center/);
   assert.doesNotMatch(result, /script|javascript|color:red/);
+  assert.match(result, /color:#555551/);
   assert.ok(hasMeaningfulContent(result));
   assert.equal(hasMeaningfulContent("<p><br></p>"), false);
 });

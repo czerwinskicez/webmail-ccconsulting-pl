@@ -13,11 +13,17 @@ export function sanitizeEmailHtml(value: unknown): string {
   if (typeof value !== "string" || value.length > 100_000) return "";
   return sanitizeHtml(value, {
     allowedTags: ["p", "br", "strong", "em", "u", "s", "ul", "ol", "li", "a", "h2", "h3", "blockquote"],
-    allowedAttributes: { a: ["href", "target", "rel"], "*": ["style"] },
+    allowedAttributes: { a: ["href", "target", "rel", "style"], "*": ["style"] },
     allowedSchemes: ["http", "https", "mailto"],
-    allowedStyles: { "*": { "text-align": [/^(left|center|right)$/] } },
+    allowedStyles: {
+      "*": { "text-align": [/^(left|center|right)$/] },
+      a: {
+        color: [/^#777772$/],
+        "text-decoration": [/^underline$/],
+      },
+    },
     transformTags: {
-      a: (_tagName, attribs) => ({ tagName: "a", attribs: { ...attribs, target: "_blank", rel: "noopener noreferrer" } }),
+      a: (_tagName, attribs) => ({ tagName: "a", attribs: { ...attribs, target: "_blank", rel: "noopener noreferrer", style: "color:#777772;text-decoration:underline" } }),
     },
   }).trim();
 }

@@ -22,7 +22,7 @@ Otwórz http://localhost:3000 i zaloguj się ustawionym kluczem. Zalecany klucz 
 
 Do działania wysyłek dodaj także `RESEND_API_KEY`. Nadawca jest ustawiony na `Cezary Czerwiński <biuro@ccconsulting.pl>`, dlatego domena `ccconsulting.pl` musi być zweryfikowana w Resend. Wiadomości do wielu odbiorców są wysyłane osobno; nie zawierają automatycznego UDW.
 
-Połącz z projektem prywatny Vercel Blob i udostępnij mu `BLOB_STORE_ID` oraz `BLOB_READ_WRITE_TOKEN`. Lokalną konfigurację można pobrać poleceniem `vercel env pull`. Blob przechowuje podpis i tymczasowe załączniki. Załączniki są usuwane po zakończeniu próby wysyłki; obsługiwanych jest maksymalnie 10 plików i 20 MB łącznie.
+Połącz z projektem prywatny Vercel Blob i udostępnij mu `BLOB_STORE_ID` oraz `BLOB_READ_WRITE_TOKEN`. Lokalną konfigurację można pobrać poleceniem `vercel env pull`. Blob przechowuje podpis, archiwum wysłanych wiadomości oraz ich załączniki. Tymczasowe kopie załączników są usuwane po zakończeniu próby wysyłki; obsługiwanych jest maksymalnie 10 plików i 20 MB łącznie. Archiwum jest dostępne wyłącznie do odczytu pod `/dashboard/wyslane`.
 
 ## Vercel
 
