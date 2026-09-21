@@ -29,7 +29,7 @@ Otwórz http://localhost:3000 i zaloguj się ustawionym kluczem. Zalecany klucz 
 
 ## Sesje
 
-Serwer sprawdza klucz i podpisuje token HMAC-SHA256. Ciasteczko nie zawiera klucza; ma `HttpOnly`, `SameSite=Strict`, ścieżkę `/`, a na produkcji `Secure` i prefiks `__Host-`. Sesja wygasa po 8 godzinach. Dashboard sprawdza autoryzację po stronie serwera przy każdym żądaniu. Zmiana klucza unieważnia wszystkie wcześniejsze sesje. Wylogowanie usuwa ciasteczko z przeglądarki; skopiowany token pozostaje ważny do wygaśnięcia lub zmiany klucza.
+Serwer sprawdza klucz i podpisuje token HMAC-SHA256. Ciasteczko nie zawiera klucza; ma `HttpOnly`, `SameSite=Strict`, ścieżkę `/`, a na produkcji `Secure` i prefiks `__Host-`. Sesja wygasa po 7 dniach. Dashboard sprawdza autoryzację po stronie serwera przy każdym żądaniu. Zmiana klucza unieważnia wszystkie wcześniejsze sesje. Wylogowanie usuwa ciasteczko z przeglądarki; skopiowany token pozostaje ważny do wygaśnięcia lub zmiany klucza.
 
 Przy dodawaniu kolejnych operacji i endpointów sprawdzaj uprawnienia również w ich kodzie, nie tylko w układzie strony. Aplikacja nie ma współdzielonego limitera prób logowania; przed publicznym udostępnieniem ustaw regułę rate limiting w Vercel Firewall lub dodaj limiter ze wspólnym magazynem. Nie zastępuj losowego klucza krótkim hasłem.
 

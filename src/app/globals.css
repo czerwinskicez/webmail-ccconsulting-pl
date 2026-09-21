@@ -18,16 +18,7 @@ button,input{font:inherit}button,a,input{-webkit-tap-highlight-color:transparent
 
 /* Delikatnie większe teksty pomocnicze */
 .brand-product,.sidebar-section,.sidebar-bottom small,.soon-badge{font-size:10px}
-.eyebrow,.intro-footer,.field-hint,.remember-option,.access-footer,.session-badge,.welcome-caption,.dashboard-footer{font-size:11px}
+.eyebrow,.intro-footer,.field-hint,.access-footer,.session-badge,.welcome-caption,.dashboard-footer{font-size:11px}
 .access-top,.access-note,.sidebar-bottom,.dashboard-header,.logout-button,.dashboard-note p{font-size:12px}
-
-.field-hint{margin-bottom:16px}
-.login-form .remember-option{position:relative;display:flex;align-items:center;gap:9px;width:max-content;max-width:100%;margin:0 0 25px;color:#9e9e9e;cursor:pointer}
-.remember-option input{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
-.custom-checkbox{display:grid;place-items:center;width:17px;height:17px;flex:0 0 17px;border:1px solid #555;border-radius:4px;background:#161616;color:#0c0c0c;transition:background .2s,border-color .2s}
-.custom-checkbox svg{opacity:0}
-.remember-option input:checked+.custom-checkbox{background:#ededed;border-color:#ededed}
-.remember-option input:checked+.custom-checkbox svg{opacity:1}
-.remember-option input:focus-visible+.custom-checkbox{outline:2px solid var(--accent);outline-offset:3px}
 
 @media(max-width:720px){.access-top,.session-badge,.welcome-caption,.dashboard-note p,.dashboard-footer{font-size:10px}}

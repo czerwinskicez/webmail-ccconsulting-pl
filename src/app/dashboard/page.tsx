@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { ArrowUpRight, LayoutDashboard, Mail, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowUpRight, LayoutDashboard, LogOut, Mail, ShieldCheck, Sparkles } from "lucide-react";
 import { Brand } from "@/components/brand";
 import { requireSession } from "@/lib/auth";
-import { LogoutForm } from "@/components/logout-form";
+import { logout } from "@/app/actions";
 
 export const metadata: Metadata = { title: "Dashboard" };
 
@@ -17,7 +17,7 @@ export default async function DashboardPage() {
       <div className="sidebar-bottom"><span className="avatar">CC</span><div>CC Consulting<small>Moja przestrzeń</small></div><ShieldCheck size={17} /></div>
     </aside>
     <div className="dashboard-main">
-      <header className="dashboard-header"><span>Moja przestrzeń <span className="breadcrumb-separator">/</span> <strong>Dashboard</strong></span><LogoutForm /></header>
+      <header className="dashboard-header"><span>Moja przestrzeń <span className="breadcrumb-separator">/</span> <strong>Dashboard</strong></span><form action={logout}><button className="logout-button" type="submit"><LogOut size={16} /> Wyloguj się</button></form></header>
       <main className="dashboard-content">
         <div className="dashboard-heading"><div><div className="eyebrow muted">MÓJ PANEL</div><h1>Dashboard</h1><p>Moja poczta. Moje sprawy.</p></div><span className="session-badge"><span className="status-dot" /> Sesja aktywna</span></div>
         <section className="welcome-card"><div className="welcome-copy"><div className="welcome-icon"><Sparkles size={25} /></div><h2>Hello<span>.</span></h2><p>Moja osobista przestrzeń<br />do korespondencji.</p><span className="welcome-caption">Wszystko, co ważne, pod ręką. <ArrowUpRight size={16} /></span></div><div className="dashboard-art" aria-hidden="true"><div className="dashboard-art-ring" /><Mail size={88} strokeWidth={0.8} /><span className="art-badge"><ShieldCheck size={20} /></span></div></section>
