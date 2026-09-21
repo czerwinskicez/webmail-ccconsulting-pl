@@ -1,6 +1,6 @@
 # CC Consulting Webmail
 
-Next.js App Router, TypeScript i ciemny interfejs. Logowanie jednym kluczem, chroniony dashboard i wylogowanie. Bez bazy danych i bez integracji ze skrzynką pocztową na tym etapie.
+Next.js App Router, TypeScript i ciemny interfejs. Logowanie jednym kluczem, chroniony dashboard, komponowanie ofert w edytorze Tiptap i wysyłka przez Resend. Podpis jest przechowywany w prywatnym Vercel Blob.
 
 ## Lokalnie
 
@@ -20,10 +20,14 @@ npm run dev
 
 Otwórz http://localhost:3000 i zaloguj się ustawionym kluczem. Zalecany klucz to 64 znaki hex z generatora powyżej. Pusty klucz lub klucz dłuższy niż 1024 znaki blokuje logowanie. Pliki `.env` są ignorowane przez Git. Nie dodawaj prefiksu `NEXT_PUBLIC_`.
 
+Do działania wysyłek dodaj także `RESEND_API_KEY`. Nadawca jest ustawiony na `Cezary Czerwiński <biuro@ccconsulting.pl>`, dlatego domena `ccconsulting.pl` musi być zweryfikowana w Resend. Wiadomości do wielu odbiorców są wysyłane osobno; nie zawierają automatycznego UDW.
+
+Połącz z projektem prywatny Vercel Blob i udostępnij mu `BLOB_STORE_ID` oraz `BLOB_READ_WRITE_TOKEN`. Lokalną konfigurację można pobrać poleceniem `vercel env pull`. Blob przechowuje podpis i tymczasowe załączniki. Załączniki są usuwane po zakończeniu próby wysyłki; obsługiwanych jest maksymalnie 10 plików i 20 MB łącznie.
+
 ## Vercel
 
 1. Umieść projekt w repozytorium Git i zaimportuj je do Vercel jako projekt Next.js.
-2. W Settings → Environment Variables dodaj `WEBMAIL_SECRET` z wygenerowanym losowym kluczem. Dla Preview użyj osobnego klucza.
+2. W Settings → Environment Variables dodaj `WEBMAIL_SECRET` z wygenerowanym losowym kluczem i `RESEND_API_KEY`. Dla Preview użyj osobnych kluczy.
 3. Wdróż projekt. Zmiana zmiennych środowiskowych wymaga ponownego wdrożenia.
 4. W Settings → Domains dodaj `webmail.ccconsulting.pl` i ustaw rekord DNS zgodnie z wartością pokazaną przez Vercel. Vercel obsłuży HTTPS.
 

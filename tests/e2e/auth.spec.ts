@@ -6,6 +6,8 @@ loadEnvConfig(process.cwd());
 test("login, protected dashboard, session persistence and logout", async ({ page, context }) => {
   await page.goto("/dashboard");
   await expect(page).toHaveURL("http://localhost:3000/");
+  const unauthorizedSend = await page.request.post("/api/send", { data: {} });
+  expect(unauthorizedSend.status()).toBe(401);
   await expect(page.getByRole("heading", { name: "Mój Webmail." })).toBeVisible();
   await page.getByLabel("Klucz dostępu", { exact: true }).fill("incorrect-secret");
   await page.getByRole("button", { name: "Przejdź do panelu" }).click();
@@ -25,6 +27,14 @@ test("login, protected dashboard, session persistence and logout", async ({ page
   await page.setViewportSize({ width: 390, height: 844 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: "test-results/dashboard-mobile.png", fullPage: true });
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.getByRole("link", { name: /Wysyłki ofertowe/ }).click();
+  await expect(page).toHaveURL(/\/dashboard\/wysylki$/);
+  await expect(page.getByRole("heading", { name: "Nowa wiadomość" })).toBeVisible();
+  await expect(page.getByText("Cezary Czerwiński · biuro@ccconsulting.pl")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Wyślij wiadomość" })).toBeVisible();
+  await expect(page.getByText("UDW", { exact: true })).toHaveCount(0);
+  await page.screenshot({ path: "test-results/mailings-desktop.png", fullPage: true });
   await page.getByRole("button", { name: "Wyloguj się" }).click();
   await expect(page).toHaveURL("http://localhost:3000/");
   await page.goto("/dashboard");
