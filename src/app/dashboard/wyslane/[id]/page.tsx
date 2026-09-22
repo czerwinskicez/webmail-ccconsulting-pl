@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { ArrowLeft, Download, MailCheck, Paperclip } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArchiveButton } from "@/components/archive-button";
 import { OfferEmailContent } from "@/emails/offer-email";
+import { getArchiveState } from "@/lib/archive-store";
 import { getSentMessage } from "@/lib/sent-mail-store";
 
 type SentMessagePageProps = { params: Promise<{ id: string }> };
@@ -11,12 +13,13 @@ export const metadata: Metadata = { title: "Podgląd wysłanej wiadomości" };
 
 export default async function SentMessagePage({ params }: SentMessagePageProps) {
   const { id } = await params;
-  const message = await getSentMessage(id);
+  const [message, archiveState] = await Promise.all([getSentMessage(id), getArchiveState()]);
   if (!message) notFound();
+  const archived = Boolean(archiveState.sent[message.id]);
 
   return <main className="dashboard-content sent-detail-content">
     <Link className="back-link" href="/dashboard/wyslane"><ArrowLeft size={15} /> Wróć do wysłanych</Link>
-    <div className="sent-detail-heading"><div><div className="eyebrow muted"><MailCheck size={13} /> WYSŁANA WIADOMOŚĆ</div><h1>{message.subject}</h1></div><time dateTime={message.sentAt}>{formatSentDate(message.sentAt)}</time></div>
+    <div className="sent-detail-heading"><div><div className="eyebrow muted"><MailCheck size={13} /> WYSŁANA WIADOMOŚĆ</div><h1>{message.subject}</h1></div><div className="detail-heading-actions"><time dateTime={message.sentAt}>{formatSentDate(message.sentAt)}</time><ArchiveButton kind="sent" id={message.id} archived={archived} /></div></div>
     <div className="sent-detail-grid">
       <article className="sent-message-card">
         <dl className="message-headers">

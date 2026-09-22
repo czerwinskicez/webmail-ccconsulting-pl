@@ -38,6 +38,7 @@ Docelowy adres aplikacji: `https://webmail.ccconsulting.pl`.
 - wbudowany wygląd wiadomości oraz własne szablony HTML;
 - podgląd wiadomości przed wysłaniem;
 - archiwum wysłanych wiadomości w prywatnym Vercel Blob;
+- ręczna archiwizacja i przywracanie wysłanych wiadomości oraz odebranych rozmów;
 - odbiór poczty przez Cloudflare Email Routing i osobnego Email Workera;
 - kopia każdej wiadomości przychodzącej przekazywana do prywatnego Gmaila;
 - widok rozmów, wyszukiwanie oraz statusy „do odpowiedzi” i „odpowiedziano”;
@@ -414,6 +415,7 @@ Blob store musi być prywatny. Aplikacja i Worker używają tego samego magazynu
 | `settings/senders.json` | lista nadawców i informacja o domyślnym |
 | `settings/email-signature.html` | globalny podpis |
 | `settings/templates.json` | własne szablony HTML |
+| `settings/archive-state.json` | stan archiwizacji wysyłek i rozmów |
 | `sent/index.json` | skrócony indeks ostatnich 1000 wysyłek |
 | `sent/messages/<uuid>.json` | pełny rekord wysłanej wiadomości |
 | `sent/attachments/<messageId>/<filename>` | zarchiwizowane załączniki wychodzące, gdy funkcja zostanie udostępniona |
@@ -521,6 +523,12 @@ type Conversation = {
 
 To celowe rozwiązanie: Worker nie musi znać modelu archiwum wysyłek, a Next.js łączy oba kierunki przez standardowe identyfikatory wiadomości. Odczyt pojedynczych blobów rozmów jest cache'owany do godziny z datą uploadu jako częścią klucza; lista obiektów jest pobierana ponownie przy budowaniu widoku.
 
+### Archiwizacja
+
+Archiwizacja nie przenosi ani nie usuwa rekordów wiadomości. Plik `settings/archive-state.json` przechowuje identyfikatory zarchiwizowanych wysyłek oraz migawkę daty najnowszego maila przychodzącego w zarchiwizowanej rozmowie. Widoki „Wysłane” i „Odebrane” dzielą dane na osobne listy bieżące i archiwalne; każdą pozycję można później przywrócić.
+
+Jeżeli do zarchiwizowanego wątku przyjdzie nowa wiadomość, jej data będzie późniejsza od zapisanej migawki i rozmowa automatycznie wróci na listę bieżącą. Sama odpowiedź wychodząca nie powoduje takiego przywrócenia.
+
 ## Endpointy aplikacji
 
 Wszystkie endpointy modyfikujące wymagają sesji oraz żądania z tego samego originu.
@@ -528,6 +536,7 @@ Wszystkie endpointy modyfikujące wymagają sesji oraz żądania z tego samego o
 | Endpoint | Metoda | Działanie |
 | --- | --- | --- |
 | `/api/send` | `POST` | walidacja, renderowanie, wysyłka przez Resend i archiwizacja |
+| `/api/archive` | `POST` | archiwizacja lub przywrócenie wysyłki albo rozmowy |
 | `/api/signature` | `POST` | zapis globalnego podpisu |
 | `/api/senders` | `POST` | dodanie nadawcy |
 | `/api/senders` | `PUT` | edycja nadawcy |
