@@ -39,7 +39,7 @@ test("login, protected dashboard, session persistence and logout", async ({ page
   await expect(page.getByLabel("Etykieta")).toHaveValue("Propozycja współpracy");
   await page.getByLabel("Etykieta").fill("Pierwszy kontakt");
   await page.getByRole("button", { name: "Podgląd" }).click();
-  const preview = page.getByRole("dialog", { name: "Tak zobaczy ją odbiorca" });
+  const preview = page.getByRole("dialog", { name: "Widok odbiorcy" });
   await expect(preview.getByText("Pierwszy kontakt", { exact: true })).toBeVisible();
   await expect(preview.getByRole("link", { name: "+48 666 555 610" })).toBeVisible();
   await page.screenshot({ path: "test-results/email-preview-desktop.png", fullPage: true });

@@ -5,22 +5,23 @@ type OfferEmailProps = {
   signatureHtml: string;
   subject: string;
   templateLabel?: string;
+  replyHistoryHtml?: string;
 };
 
 const pageStyle: React.CSSProperties = { margin: 0, padding: 0, width: "100%", backgroundColor: "#f2f2f0", color: "#151515" };
 
-export function OfferEmail({ bodyHtml, signatureHtml, subject, templateLabel = "Propozycja współpracy" }: OfferEmailProps) {
+export function OfferEmail({ bodyHtml, signatureHtml, subject, templateLabel = "Propozycja współpracy", replyHistoryHtml }: OfferEmailProps) {
   return <html lang="pl">
     {/* This document is rendered by Resend as email HTML, outside the Next.js page tree. */}
     {/* eslint-disable-next-line @next/next/no-head-element */}
     <head><meta charSet="utf-8" /><meta name="viewport" content="width=device-width" /><title>{subject}</title></head>
     <body style={pageStyle}>
-      <OfferEmailContent bodyHtml={bodyHtml} signatureHtml={signatureHtml} subject={subject} templateLabel={templateLabel} includePreviewText />
+      <OfferEmailContent bodyHtml={bodyHtml} signatureHtml={signatureHtml} subject={subject} templateLabel={templateLabel} replyHistoryHtml={replyHistoryHtml} includePreviewText />
     </body>
   </html>;
 }
 
-export function OfferEmailContent({ bodyHtml, signatureHtml, subject, templateLabel = "Propozycja współpracy", includePreviewText = false }: OfferEmailProps & { includePreviewText?: boolean }) {
+export function OfferEmailContent({ bodyHtml, signatureHtml, subject, templateLabel = "Propozycja współpracy", replyHistoryHtml, includePreviewText = false }: OfferEmailProps & { includePreviewText?: boolean }) {
   return <>
     {includePreviewText && <div style={{ display: "none", maxHeight: 0, overflow: "hidden", opacity: 0, color: "transparent", fontSize: 1, lineHeight: "1px" }}>{subject}</div>}
     <table role="presentation" width="100%" cellPadding="0" cellSpacing="0" border={0} bgcolor="#f2f2f0" style={{ width: "100%", backgroundColor: "#f2f2f0", margin: 0, padding: 0 }}>
@@ -54,5 +55,6 @@ export function OfferEmailContent({ bodyHtml, signatureHtml, subject, templateLa
         </table>
       </td></tr></tbody>
     </table>
+    {replyHistoryHtml && <table role="presentation" width="100%" cellPadding="0" cellSpacing="0" border={0} style={{ background: "#ffffff", color: "#555555" }}><tbody><tr><td style={{ padding: 24, fontFamily: "Arial,Helvetica,sans-serif" }}><div dangerouslySetInnerHTML={{ __html: replyHistoryHtml }} /></td></tr></tbody></table>}
   </>;
 }

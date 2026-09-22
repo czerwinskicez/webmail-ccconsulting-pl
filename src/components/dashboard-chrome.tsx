@@ -1,14 +1,17 @@
 "use client";
 
-import { LayoutDashboard, LogOut, MailCheck, MailPlus, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, LogOut, MailCheck, MailPlus, ShieldCheck, UsersRound, PanelsTopLeft, Inbox } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { logout } from "@/app/actions";
 import { Brand } from "@/components/brand";
 
 const navigation = [
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/dashboard/odebrane", label: "Odebrane", icon: Inbox },
   { href: "/dashboard/wysylki", label: "Wysyłki", icon: MailPlus },
   { href: "/dashboard/wyslane", label: "Wysłane", icon: MailCheck },
+  { href: "/dashboard/nadawcy", label: "Nadawcy", icon: UsersRound },
+  { href: "/dashboard/szablony", label: "Szablony", icon: PanelsTopLeft },
 ];
 
 export function DashboardChrome({ children }: { children: React.ReactNode }) {

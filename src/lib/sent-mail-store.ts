@@ -19,6 +19,13 @@ export type SentMessage = {
   cc: string[];
   subject: string;
   templateLabel?: string;
+  renderedHtml?: string;
+  templateName?: string;
+  replyToKey?: string;
+  replyHistoryHtml?: string;
+  inReplyTo?: string;
+  references?: string;
+  emailMessageIds?: string[];
   bodyHtml: string;
   signatureHtml: string;
   resendIds: string[];

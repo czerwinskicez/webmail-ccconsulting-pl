@@ -9,3 +9,5 @@ test-results/
 
 .vercel
 .env*
+
+inbound/node_modules/

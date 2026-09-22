@@ -24,8 +24,9 @@ export default async function SentMessagePage({ params }: SentMessagePageProps) 
           <div><dt>Do</dt><dd>{message.to.join(", ")}</dd></div>
           {message.cc.length > 0 && <div><dt>DW</dt><dd>{message.cc.join(", ")}</dd></div>}
           <div><dt>Temat</dt><dd>{message.subject}</dd></div>
+          {message.replyToKey && <div><dt>Wątek</dt><dd><Link href={`/dashboard/odebrane/${message.replyToKey}`}>Otwórz wiadomość, na którą odpowiadam</Link></dd></div>}
         </dl>
-        <div className="sent-email-preview"><OfferEmailContent bodyHtml={message.bodyHtml} signatureHtml={message.signatureHtml} subject={message.subject} templateLabel={message.templateLabel ?? "Propozycja współpracy"} /></div>
+        <div className="sent-email-preview">{message.renderedHtml ? <iframe className="template-frame" title="Wysłana wiadomość" sandbox="" referrerPolicy="no-referrer" srcDoc={message.renderedHtml} /> : <OfferEmailContent replyHistoryHtml={message.replyHistoryHtml} bodyHtml={message.bodyHtml} signatureHtml={message.signatureHtml} subject={message.subject} templateLabel={message.templateLabel ?? "Propozycja współpracy"} />}</div>
       </article>
       <aside className="sent-detail-sidebar">
         <section><span className="side-label">STATUS</span><div className="delivered-status"><span className="status-dot" /> Wysłano przez Resend</div><small>{message.resendIds.length} {message.resendIds.length === 1 ? "identyfikator dostarczenia" : "identyfikatory dostarczenia"}</small></section>

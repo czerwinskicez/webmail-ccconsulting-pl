@@ -1,14 +1,27 @@
 import type { Metadata } from "next";
-import { MailPlus } from "lucide-react";
 import { MailComposer } from "@/components/mail-composer";
 import { getSignature } from "@/lib/signature-store";
+import { getSenders } from "@/lib/sender-store";
+import { getTemplates } from "@/lib/template-store";
+import type { MailTemplate } from "@/lib/mail-template";
+import { getInbound } from "@/lib/inbound-store";
+import { replyDraft } from "@/lib/inbound-mail";
+import { notFound } from "next/navigation";
+import { buildReplyHistory } from "@/lib/reply-history";
 
 export const metadata: Metadata = { title: "Wysyłki" };
 
-export default async function MailingsPage() {
-  const signature = await getSignature();
+export default async function MailingsPage({ searchParams }: { searchParams: Promise<{ reply?: string }> }) {
+  const [signature, senders] = await Promise.all([getSignature(), getSenders()]);
+  const { reply } = await searchParams;
+  const original = reply ? await getInbound(reply) : null;
+  if (reply && !original) notFound();
+  const draft = original ? { ...replyDraft(original, senders), historyHtml: buildReplyHistory(original) } : undefined;
+  let templates: MailTemplate[] = [];
+  let templateError: string | undefined;
+  try { templates = await getTemplates(); }
+  catch { templateError = "Nie udało się wczytać szablonów. Możesz użyć wbudowanego wyglądu lub odświeżyć stronę."; }
   return <main className="dashboard-content mailings-content">
-    <div className="dashboard-heading mailings-heading"><div><div className="eyebrow muted"><MailPlus size={13} /> KORESPONDENCJA</div><h1>Nowa wiadomość</h1><p>Przygotuj wiadomość i wyślij ją do wybranych odbiorców.</p></div><span className="sender-badge">Cezary Czerwiński · biuro@ccconsulting.pl</span></div>
-    <MailComposer initialSignature={signature} />
+    <MailComposer key={reply || "new"} initialSignature={signature} senders={senders} templates={templates} templateError={templateError} reply={draft} />
   </main>;
 }
