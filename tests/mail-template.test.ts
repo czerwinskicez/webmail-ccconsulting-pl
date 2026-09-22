@@ -30,3 +30,17 @@ test("body and signature placeholders are replaced once and sanitized", () => {
   const html = renderMailTemplate('<div>{{body}}</div><div>{{signature}}</div>', { bodyHtml: '<p>{{signature}}</p><img src=x onerror=alert(1)>', signatureHtml: '<p>Podpis</p>', subject: "Temat", templateLabel: "Kontakt" });
   assert.equal(html, '<div><p>{{signature}}</p></div><div><p>Podpis</p></div>');
 });
+
+test("Georgia cold-mail template survives sanitization with email-safe table layout", () => {
+  const source = readFileSync("templates/cold-mail-georgia.html", "utf8");
+  const template = validateTemplate({ name: "Cold mail Georgia", html: source });
+  const html = renderMailTemplate(template.html, { bodyHtml: "<p>Dzień dobry,</p>", signatureHtml: "<p>Podpis</p>", subject: "Kontakt", templateLabel: "" });
+  assert.match(html, /role="presentation"/);
+  assert.match(html, /width="600"/);
+  assert.match(html, /max-width:600px/);
+  assert.match(html, /font-family:Georgia/);
+  assert.match(html, /cellpadding="0"/i);
+  assert.match(html, /Dzień dobry/);
+  assert.match(html, /Podpis/);
+  assert.doesNotMatch(html, /<style|@media|<script/);
+});
